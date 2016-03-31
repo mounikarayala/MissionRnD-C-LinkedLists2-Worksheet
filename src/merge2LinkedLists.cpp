@@ -12,12 +12,56 @@ NOTES:
 */
 
 #include <stdio.h>
+#include<malloc.h>
 
 struct node {
 	int num;
 	struct node *next;
 };
 
+struct node * create(int n,struct node *start){
+	struct node *ptr, *newnode;
+	newnode = (struct node*)malloc(sizeof(struct node));
+	newnode->num = n;
+	if (start == NULL){
+		newnode->next = NULL;
+		start = newnode;
+	}
+	else{
+		ptr = start;
+		while (ptr->next != NULL)
+			ptr = ptr->next;
+		ptr->next = newnode;
+		newnode->next = NULL;
+		newnode = start;
+	}
+	return start;
+}
 struct node * merge2LinkedLists(struct node *head1, struct node *head2) {
-	return NULL;
+	if (head1 == NULL)
+		return head2;
+	if (head2 == NULL)
+		return head1;
+	if (head1 == NULL && head2 == NULL)
+		return NULL;
+	struct node *start=NULL;
+	while (head1 != NULL&&head2 != NULL){
+		if (head1->num < head2->num){
+			start = create(head1->num, start);
+			head1 = head1->next;
+		}
+		else{
+			start = create(head2->num, start);
+			head2 = head2->next;
+		}
+	}
+	while (head1 != NULL){
+		start = create(head1->num, start);
+		head1 = head1->next;
+	}
+	while (head2){
+		start = create(head2->num, start);
+		head2 = head2->next;
+	}
+	return start;
 }
